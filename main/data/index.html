@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA - Gestion de File d'Attente Technique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Container -->
+    <div class="login-container" id="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">G</div>
+                <h2 class="login-title">Connexion GTA</h2>
+                <p class="login-subtitle">Gestion de File d'Attente Technique</p>
+            </div>
+            <form class="login-form" id="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Identifiant</label>
+                    <input type="text" id="username" class="form-input" required placeholder="Votre identifiant">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" id="password" class="form-input" required placeholder="Votre mot de passe">
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="container" id="app-container">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">G</div>
+                <div>
+                    <h1 class="header-title">GTA</h1>
+                    <p class="header-subtitle">Gestion de File d'Attente Technique</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="current-time" id="current-time"></div>
+                <button class="logout-btn" id="logout-btn">Déconnexion</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="left-column">
+                <!-- Current Client Section -->
+                <section class="card current-client">
+                    <div class="card-header">
+                        <h2 class="card-title">Véhicule en cours</h2>
+                        <div class="card-badge">Actuel</div>
+                    </div>
+                    <div id="current-client-container">
+                        <p style="color: var(--text-secondary);">Aucun véhicule en cours</p>
+                    </div>
+                    <div id="current-tests-container" style="margin-top: var(--spacing-lg);"></div>
+                </section>
+
+                <!-- Waiting Queue Section -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">File d'attente</h2>
+                        <div class="card-badge" id="queue-count">0</div>
+                    </div>
+                    <button id="call-next-btn" class="btn btn-primary call-next-btn">
+                        📞 Appeler véhicule suivant
+                    </button>
+                    <ul class="waiting-list" id="waiting-list"></ul>
+                </section>
+            </div>
+
+            <div class="right-column">
+                <!-- History Section -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Historique</h2>
+                        <div class="card-badge" id="history-count">0</div>
+                    </div>
+                    <button id="download-all-btn" class="btn btn-secondary" style="margin-bottom: var(--spacing-lg);">
+                        📄 Télécharger historique PDF
+                    </button>
+                    <ul class="history-list" id="history-list"></ul>
+                </section>
+
+                <!-- Settings Section -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Paramètres</h2>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="technician-name" class="form-label">Technicien connecté</label>
+                            <input type="text" id="technician-name" class="form-input" disabled>
+                        </div>
+                        
+                        <!-- Gestion des techniciens -->
+                        <div class="form-group">
+                            <h3 style="margin-bottom: var(--spacing-md); font-size: 1.125rem; color: var(--text-primary);">Gestion des techniciens</h3>
+                            
+                            <!-- Liste des techniciens existants -->
+                            <div style="margin-bottom: var(--spacing-lg);">
+                                <label class="form-label">Techniciens existants</label>
+                                <ul id="technicians-list" class="technicians-list"></ul>
+                            </div>
+                            
+                            <!-- Formulaire d'ajout -->
+                            <div style="border-top: 1px solid var(--gray-200); padding-top: var(--spacing-lg);">
+                                <h4 style="margin-bottom: var(--spacing-md); font-size: 1rem; color: var(--text-primary);">Ajouter un technicien</h4>
+                                <form id="add-technician-form">
+                                    <div class="form-group">
+                                        <label for="new-technician-username" class="form-label">Identifiant</label>
+                                        <input type="text" id="new-technician-username" class="form-input" 
+                                            placeholder="Nom d'utilisateur" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-technician-password" class="form-label">Mot de passe</label>
+                                        <input type="password" id="new-technician-password" class="form-input" 
+                                            placeholder="Mot de passe" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-technician-confirm" class="form-label">Confirmer le mot de passe</label>
+                                        <input type="password" id="new-technician-confirm" class="form-input" 
+                                            placeholder="Confirmer le mot de passe" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">➕ Ajouter le technicien</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- History Detail Modal -->
+    <div id="history-detail-overlay" class="history-detail-overlay">
+        <div class="history-detail-card">
+            <button class="close-btn" id="history-detail-close-btn">&times;</button>
+            <h3>Détails de la Visite <span id="detail-visit-number"></span></h3>
+            <div style="margin: var(--spacing-lg) 0;">
+                <p><strong>Véhicule :</strong> <span id="detail-vehicle-id"></span></p>
+                <p><strong>Technicien :</strong> <span id="detail-technician"></span></p>
+                <p><strong>Début :</strong> <span id="detail-start-time"></span></p>
+                <p><strong>Fin :</strong> <span id="detail-end-time"></span></p>
+                <p><strong>Durée :</strong> <span id="detail-duration"></span></p>
+            </div>
+            <h4>Tests effectués :</h4>
+            <ul id="detail-tests-list" style="margin-top: var(--spacing-md);"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

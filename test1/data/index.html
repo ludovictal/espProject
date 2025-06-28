@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <title>GTA - Gestion de File d'Attente Technique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container" id="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">G</div>
+                <h2 class="login-title">Connexion GTA</h2>
+                <p class="login-subtitle">Gestion de File d'Attente Technique</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="username">Identifiant</label>
+                    <input class="form-input" id="username" placeholder="Votre identifiant" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Mot de passe</label>
+                    <input class="form-input" id="password" placeholder="Votre mot de passe" required type="password">
+                </div>
+                <button class="btn btn-primary" type="submit">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="app-container">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">G</div>
+                <div>
+                    <h1 class="header-title">GTA</h1>
+                    <p class="header-subtitle">Gestion de File d'Attente Technique</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="current-time" id="current-time"></div>
+                <button class="logout-btn" id="logout-btn">Déconnexion</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="left-column">
+                <section class="card current-client">
+                    <div class="card-header">
+                        <h2 class="card-title">Véhicule en cours</h2>
+                        <div class="card-badge">Actuel</div>
+                    </div>
+                    <div id="current-client-container">
+                        <p style="color:var(--text-secondary)">Aucun véhicule en cours</p>
+                    </div>
+                    <div id="current-tests-container" style="margin-top:var(--spacing-lg)"></div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">File d'attente</h2>
+                        <div class="card-badge" id="queue-count">0</div>
+                    </div>
+                    <button class="btn btn-primary call-next-btn" id="call-next-btn">📞 Appeler véhicule suivant</button>
+                    <ul id="waiting-list" class="waiting-list"></ul>
+                </section>
+            </div>
+
+            <div class="right-column">
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Historique</h2>
+                        <div class="card-badge" id="history-count">0</div>
+                    </div>
+                    <ul id="history-list" class="history-list"></ul>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Rapports d'Analyse</h2>
+                    </div>
+                    <div class="reports-section">
+                        <div class="form-group">
+                            <label class="form-label" for="report-period">Période d'analyse</label>
+                            <select class="form-input" id="report-period">
+                                <option value="today">Aujourd'hui</option>
+                                <option value="3days">3 derniers jours</option>
+                                <option value="week">Cette semaine</option>
+                            </select>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-primary" id="generate-report-btn">📊 Générer le rapport</button>
+                            <button class="btn btn-secondary" id="download-report-btn" disabled>📊 Télécharger Excel</button>
+                            <button class="btn btn-secondary" id="download-pdf-btn" disabled>📄 Télécharger PDF</button>
+                        </div>
+                        <div id="report-container" class="report-container" style="display: none;">
+                            <div class="report-header">
+                                <h3 id="report-title">Rapport d'Analyse</h3>
+                                <p id="report-period-text" class="report-period-text"></p>
+                            </div>
+                            <div class="report-stats">
+                                <div class="stat-card">
+                                    <div class="stat-value" id="total-visits">0</div>
+                                    <div class="stat-label">Visites totales</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="avg-duration">0min</div>
+                                    <div class="stat-label">Durée moyenne</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="success-rate">0%</div>
+                                    <div class="stat-label">Taux de réussite</div>
+                                </div>
+                            </div>
+                            <div class="report-table-container">
+                                <table class="report-table" id="report-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Test</th>
+                                            <th>Total</th>
+                                            <th>Réussis</th>
+                                            <th>Avertissements</th>
+                                            <th>Échecs</th>
+                                            <th>Taux de réussite</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="report-table-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Paramètres</h2>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label class="form-label" for="technician-name">Technicien connecté</label>
+                            <input class="form-input" id="technician-name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <h3 style="margin-bottom:var(--spacing-md);font-size:1.125rem;color:var(--text-primary)">Gestion des techniciens</h3>
+                            <div style="margin-bottom:var(--spacing-lg)">
+                                <label class="form-label">Techniciens existants</label>
+                                <ul id="technicians-list" class="technicians-list"></ul>
+                            </div>
+                            <div style="border-top:1px solid var(--gray-200);padding-top:var(--spacing-lg)">
+                                <h4 style="margin-bottom:var(--spacing-md);font-size:1rem;color:var(--text-primary)">Ajouter un technicien</h4>
+                                <form id="add-technician-form">
+                                    <div class="form-group">
+                                        <label class="form-label" for="new-technician-username">Identifiant</label>
+                                        <input class="form-input" id="new-technician-username" placeholder="Nom d'utilisateur" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="new-technician-password">Mot de passe</label>
+                                        <input class="form-input" id="new-technician-password" placeholder="Mot de passe" required type="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="new-technician-confirm">Confirmer le mot de passe</label>
+                                        <input class="form-input" id="new-technician-confirm" placeholder="Confirmer le mot de passe" required type="password">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">➕ Ajouter le technicien</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="history-detail-overlay" id="history-detail-overlay">
+        <div class="history-detail-card">
+            <button class="close-btn" id="history-detail-close-btn">×</button>
+            <h3>Détails de la Visite <span id="detail-visit-number"></span></h3>
+            <div style="margin:var(--spacing-lg) 0">
+                <p><strong>Véhicule :</strong> <span id="detail-vehicle-id"></span></p>
+                <p><strong>Technicien :</strong> <span id="detail-technician"></span></p>
+                <p><strong>Début :</strong> <span id="detail-start-time"></span></p>
+                <p><strong>Fin :</strong> <span id="detail-end-time"></span></p>
+                <p><strong>Durée :</strong> <span id="detail-duration"></span></p>
+            </div>
+            <h4>Tests effectués :</h4>
+            <ul id="detail-tests-list" style="margin-top:var(--spacing-md)"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
